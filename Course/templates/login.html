@@ -4,71 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-
-    <!-- Clean & Modern Styling -->
     <style>
-        body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0;
-            padding: 20px;
-        }
-        .login-box {
-            background: white;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 400px;
-        }
-        h2 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 25px;
-            font-weight: 600;
-        }
-        input[type="text"], input[type="password"] {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
-            box-sizing: border-box;
-        }
-        button {
-            width: 100%;
-            padding: 14px;
-            background: #667eea;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-            margin-top: 10px;
-        }
-        button:hover {
-            background: #5a6fd8;
-        }
-        .signup-link {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 14px;
-        }
-        .signup-link a {
-            color: #667eea;
-            text-decoration: none;
-            font-weight: 500;
-        }
-        .signup-link a:hover {
-            text-decoration: underline;
-        }
+        /* your beautiful styling stays 100% */
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; margin: 0; padding: 20px; }
+        .login-box { background: white; padding: 40px; border-radius: 15px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+        h2 { text-align: center; color: #333; margin-bottom: 25px; font-weight: 600; }
+        input[type="text"], input[type="password"] { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
+        button { width: 100%; padding: 14px; background: #667eea; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        button:hover { background: #5a6fd8; }
+        .signup-link { text-align: center; margin-top: 20px; font-size: 14px; }
+        .signup-link a { color: #667eea; text-decoration: none; font-weight: 500; }
+        .signup-link a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -76,50 +22,36 @@
 <div class="login-box">
     <h2>Login to Your Account</h2>
 
-    <!-- Fixed: {{ form.as_p }} and action -->
     <form method="POST" action="{% url 'login' %}">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Login</button>
     </form>
 
+    <!-- LOGOUT MESSAGE (THIS ONE ONLY) -->
+    {% if messages %}
+        {% for message in messages %}
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+            <script>
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Goodbye!',
+                    text: '{{ message }}',
+                    timer: 3000,
+                    showConfirmButton: false,
+                    backdrop: 'rgba(0,0,0,0.7)'
+                });
+            </script>
+        {% endfor %}
+    {% endif %}
+
     <div class="signup-link">
         <p>Don't have an account? <a href="{% url 'signup' %}">Sign up</a></p>
     </div>
 </div>
 
-<!-- SweetAlert2 CDN -->
+<!-- SweetAlert2 CDN (only once) -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-<!-- SweetAlert Logic -->
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        {% if messages %}
-            let hasShown = false;
-            {% for message in messages %}
-                {% if not hasShown %}
-                    Swal.fire({
-                        icon: '{{ message.tags }}',
-                        title: 'Login {{ message.tags|capfirst }}',
-                        text: '{{ message|escapejs }}',
-                        confirmButtonText: 'OK',
-                        allowOutsideClick: false,
-                        customClass: {
-                            popup: 'animated fadeIn'
-                        }
-                    }).then((result) => {
-                        {% if 'success' in message.tags %}
-                            if (result.isConfirmed) {
-                                window.location.href = "/";  <!-- Matches your redirect('/') -->
-                            }
-                        {% endif %}
-                    });
-                    hasShown = true;
-                {% endif %}
-            {% endfor %}
-        {% endif %}
-    });
-</script>
 
 </body>
 </html>

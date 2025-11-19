@@ -47,21 +47,33 @@
         {% if p %}
             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
                 {% for c in p %}
-                    <div class="col">
-                        <div class="card h-100 course-card shadow-sm">
-                            <div class="card-body d-flex flex-column">
-                                <h5 class="card-title">{{ c.title }}</h5>
-                                <p class="card-text text-muted flex-grow-1">
-                                    {{ c.description|truncatewords:20 }}
-                                </p>
-                                <a href="{% url 'course_description' course_id=c.id %}" 
-                                   class="btn btn-outline-primary mt-auto">
-                                    View Details
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
+    <div class="col">
+        <div class="card h-100 course-card shadow-sm">
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title">{{ c.title }}</h5>
+                <p class="card-text text-muted flex-grow-1">
+                    {{ c.description|truncatewords:20 }}
+                </p>
+                <div class="mt-auto d-flex gap-2">
+                    <a href="{% url 'course_description' course_id=c.id %}" 
+                       class="btn btn-outline-primary btn-sm">
+                        View Details
+                    </a>
+
+                    {% if user.is_authenticated %}
+                        {% if student and c in student.courses.all %}
+                            <span class="badge bg-success">Enrolled</span>
+                        {% else %}
+                            <a href="{% url 'enroll' c.id %}" class="btn btn-success btn-sm">Enroll Now</a>
+                        {% endif %}
+                    {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-secondary btn-sm">Login to Enroll</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
             </div>
         {% else %}
             <p class="empty-state">No courses are currently available.</p>

@@ -19,7 +19,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 load_dotenv(BASE_DIR / '.env')  # This line is important!
 # DEBUG: Print to confirm
-print("HOST from .env:", os.getenv('SUPABASE_HOST'))
+# print("HOST from .env:", os.getenv('SUPABASE_HOST'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -28,7 +28,7 @@ print("HOST from .env:", os.getenv('SUPABASE_HOST'))
 SECRET_KEY = 'django-insecure-hu4^#+5d6l-%ldv1l6sn^bgbp*q)ai-3)i8+7rcc!nlqc-w#ta'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', 'True') == 'True'
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -92,9 +92,7 @@ DATABASES = {
         'PASSWORD': os.getenv('SUPABASE_PASSWORD'),
         'HOST': os.getenv('SUPABASE_HOST'),
         'PORT': os.getenv('SUPABASE_PORT'),
-        'OPTIONS': {
-            'sslmode': 'require',
-        },
+
     }
 }
 

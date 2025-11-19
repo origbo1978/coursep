@@ -3,74 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <title>{% block title %}Sk Academy{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body { background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); min-height: 100vh; }
+    </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">Navbar</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a>
-            </li>
-            <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
-            </li>
-            <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Academics
-            </a>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="{% url 'courses' %}">MyCourses</a></li>
-                <li><a class="dropdown-item" href="#">Profile</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="#">Something else here</a></li>
-            </ul>
-            </li>
-            <li class="nav-item">
-            <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-            </li>
-        </ul>
-         {% if user.is_authenticated %}
-         <div>
-           <a class="nav-item" href="#">welcome, {{user.username}}</a></div>
-        <form class="d-flex" role="search">
-            
-             
-            <a href="{% url 'logout' %}" class="btn btn-outline-success">  logout</a> 
-          
-        </form>
-          {% else %}
-           
-         <form class="d-flex" role="search">
-            
-             
-            <a href="{% url 'login' %}" class="btn btn-outline-success" >  login</a> 
-          
-        </form>
-            {% endif %}
+
+    <!-- NAVBAR (copy-paste forever, never touch again) -->
+    <nav class="navbar navbar-expand-lg bg-white shadow-sm sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="{% url 'home' %}">Sk Academy</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="nav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Academics</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'courses' %}">My Courses</a></li>
+                            <li><a class="dropdown-item" href="{% url 'profile_view' %}">Profile</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <form class="d-flex me-3" action="{% url 'courses' %}" method="GET">
+                    <input class="form-control me-2" type="search" name="q" placeholder="Search...">
+                    <button class="btn btn-outline-primary" type="submit">Search</button>
+                </form>
+                {% if user.is_authenticated %}
+                    <span class="me-3">Hi, <strong>{{ user.username }}</strong></span>
+                    <a href="{% url 'logout' %}" class="btn btn-sm btn-outline-danger">Logout</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn btn-sm btn-outline-success">Login</a>
+                {% endif %}
+            </div>
         </div>
-    </div>
     </nav>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 
-
+    <!-- MAIN CONTENT -->
     {% block content %}
-
-
-
-
-
-
-
-
-
-
     {% endblock %}
+
+    <!-- FOOTER -->
+    <footer class="bg-dark text-white text-center py-4 mt-auto">
+        <p class="mb-0">© 2025 skyeo. All rights reserved.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

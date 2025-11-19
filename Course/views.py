@@ -15,7 +15,10 @@ def home_view(request):
 
     student = None
     if request.user.is_authenticated:
-        student = get_object_or_404(Student, user=request.user)
+        try:
+            student = Student.objects.get(user=request.user)
+        except Student.DoesNotExist:
+            student = None  # if user has no Student profile (rare, but safe)
 
     context = {
         'p': p,
@@ -23,12 +26,10 @@ def home_view(request):
     }
     return render(request, 'home.html', context)
 
-
 def logout_view(request):
-    """Log the user out and redirect to the login page."""
+    messages.success(request, 'You have been logged out successfully!')
     logout(request)
     return redirect('login')
-
 
 def login_view(request):
     """Handle login form submission."""
@@ -61,11 +62,17 @@ def signup_view(request):
     return render(request, 'signup.html', {'form': form})
 
 
-@login_required
+
 def courses(request):
-    """List all courses for a logged-in student."""
     p = Course.objects.all()
-    student = get_object_or_404(Student, user=request.user)
+
+    # ONLY get student if user is logged in
+    student = None
+    if request.user.is_authenticated:
+        try:
+            student = Student.objects.get(user=request.user)
+        except Student.DoesNotExist:
+            student = None
 
     context = {
         'p': p,
@@ -107,3 +114,11 @@ def profile_view(request):
         'enrollments': []  # empty list so template doesn't break
     }
     return render(request, 'profile.html', context)
+
+
+@login_required
+def enroll(request, course_id):
+    course = get_object_or_404(Course, id=course_id)
+    student = get_object_or_404(Student, user=request.user)
+    student.courses.add(course)   
+    return redirect('courses')
